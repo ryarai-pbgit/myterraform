@@ -1,2 +1,2 @@
 # myterraform
-Full Stack Engineer Basis
+Terraform basics notes
