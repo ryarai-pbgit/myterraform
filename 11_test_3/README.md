@@ -69,7 +69,7 @@ run "instance_module_test" {
         region = "asia-northeast1"
         zone = "asia-northeast1-a"
         vm_tags = "operation"
-        project_id = "ryarai-mygcp"
+        project_id = "YOUR_PROJECT_ID"
         mysubnet_self_link = run.network_setup.mysubnet_selflink
     }
 
@@ -92,7 +92,7 @@ run "instance_module_test" {
 
     # IAM
     assert {
-        condition     = google_project_iam_member.myvmsa_roles[0].project == "ryarai-mygcp"
+        condition     = google_project_iam_member.myvmsa_roles[0].project == "YOUR_PROJECT_ID"
         error_message = "project id did not match expected" 
     }
 
@@ -149,7 +149,7 @@ run "instance_module_test" {
 
     # VMのapplyが必要なため今回は対象外にしている。
     // assert {
-    //     condition     = google_compute_instance.myvm.service_account[0].email == "myvmsa@ryarai-mygcp.iam.gserviceaccount.com"
+    //     condition     = google_compute_instance.myvm.service_account[0].email == "myvmsa@YOUR_PROJECT_ID.iam.gserviceaccount.com"
     //     error_message = "vm service_account email did not match expected" 
     // }
 
