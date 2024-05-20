@@ -1,0 +1,40 @@
+steps:
+
+  # Docker Build
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t',
+           'asia-northeast1-docker.pkg.dev/YOUR_PROJECT_ID/myreg/demoapp:$SHORT_SHA',
+           '.']
+
+  # Docker Push
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push',
+           'asia-northeast1-docker.pkg.dev/YOUR_PROJECT_ID/myreg/demoapp:$SHORT_SHA']
+
+  # set :version to :$SHORT_SHA in deployment.yaml
+  - name: 'bash'
+    script: |
+      #!/usr/bin/env bash
+      sed -i s/:version/:$SHORT_SHA/g deployment.yaml
+
+  # check deployment.yaml
+  - name: 'bash'
+    script: |
+      #!/usr/bin/env bash
+      cat deployment.yaml
+
+  # deploy container image to GKE
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+    - run
+    - --filename=deployment.yaml
+    - --location=asia-northeast1
+    - --cluster=mygkecluster
+
+logsBucket: 'gs://cloudbuildlogcr1x96ttqptpnfuh'
+
+options:
+  logging: GCS_ONLY
+  automapSubstitutions: true
+  pool:
+    name: 'projects/YOUR_PROJECT_ID/locations/asia-northeast1/workerPools/mybuildpool'
