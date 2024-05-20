@@ -1,14 +1,15 @@
-# Terraform Test 2
+# Terraform Test 3
 
 ### 1. 前提条件
-10_test_2が完了していること。<br>
+09_testが完了していること。<br>
 HashiCorp HCLというエクステンションをインストールしてください。
 
 ### 2. 今回の構成図
 前回から変更なし。
 
 ### 3. 今回のコード
-GKE、CICDのモジュールについてもテストコードを書いていきます。<br>
+今回は、ネットワークなどベースになるインフラを立ち上げた上で実行するようなモジュールについてテストを実装します。<br>
+VPCとサブネットをインフラチームから提供された後で、VMやGKEを立ち上げるようなケースを想定します。
 
 #### 3-1. ファイル作成
 tests/フォルダに、instance_module_test.tftest.hclというファイルを作成します。<br>
@@ -21,7 +22,7 @@ tests/フォルダに、instance_module_test.tftest.hclというファイルを�
 ```
 instance_module_test.tftest.hclには、下記のような内容を記載します。<br>
 プロバイダ指定とnetwork_setupというrunブロックで、テスト用にネットワークをapplyします。<br>
-runブロックの中に、variablesブロックを定義することで、
+runブロックの中に、variablesブロックを定義することで、そのrunブロックの中でのみ変数を参照することができます。
 ```
 [instance_module_test.tftest.hcl]
 provider "google" {
@@ -202,5 +203,5 @@ Success! 3 passed, 0 failed.
 ```
 
 ### 4. 次回予告
-次回は、gke, cicdモジュールのテストを実行します。
+次回は、gkeモジュールのテストを実行します。
 
