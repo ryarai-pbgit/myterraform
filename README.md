@@ -26,9 +26,11 @@
 |基礎編|13_tfstate|tfstateの仕組み、内容を確認する||
 |基礎編|14_import|terraform importの仕組み、内容を確認する||
 |基礎編|15_data_source|data sourceの仕組み、内容を確認する||
-|基礎編|16_docker|はじめてのFast apiコンテナを作成する|5/20 準備中|
+|基礎編|16_docker|はじめてのFast apiコンテナを作成する||
 |基礎編|17_docker_2|Next.jsを題材にマルチステージビルドを行う|5/20 準備中|
 |基礎編|18_kubernetes|主要なk8sリソースについて確認する|5/20 準備中|
 |基礎編|19_kubernetes_2|自作API PodをGKE上で稼働させる|5/20 準備中|
 |基礎編|20_kubernetes_3|自作API PodをCICDパイプラインに乗せて運用する|5/20 準備中|
-|実践編|（検討中）|||
+|実践編|（以下、検討中）|||
+|実践編|候補：インフラ拡充|GKE/CICDのプライベート化、セキュリティ対応（20話ぐらい）|案検討中|
+|実践編|候補：アプリ拡充|snowflakeとの接続、接続先のsnowflakeもterraform化（20話ぐらい）|案検討中|
