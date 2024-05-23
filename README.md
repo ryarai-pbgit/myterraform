@@ -34,6 +34,9 @@
 |基礎編|18_kubernetes|主要なk8sリソースについて確認する||
 |基礎編|19_kubernetes_2|自作API PodをGKE上で稼働させる||
 |基礎編|20_kubernetes_3|自作API PodをCICDパイプラインに乗せて運用する|5/23 準備中|
+|実践編|21_kubernetes|Linux Foundationの実技資格CKADの教材を紹介、操作訓練として使えます||
+
+
 |実践編|（以下、検討中）|||
 |実践編|候補：インフラ拡充|GKE/CICDのプライベート化、セキュリティ対応（20話ぐらい）|案検討中|
 |実践編|候補：アプリ拡充|snowflakeとの接続、接続先のsnowflakeもterraform化（20話ぐらい）|案検討中|
