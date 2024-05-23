@@ -8,7 +8,7 @@
 ![cicd](asset/07.png "cicd")
 
 ### 3. 準備
-下記のように、NW、インスタンス、GKEのモジュールを実行します。
+下記のように実行します。
 ```
 module "network" {
 
