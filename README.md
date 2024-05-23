@@ -33,10 +33,14 @@
 |基礎編|17_docker_2|Next.jsを題材にマルチステージビルドを行う||
 |基礎編|18_kubernetes|主要なk8sリソースについて確認する||
 |基礎編|19_kubernetes_2|自作API PodをGKE上で稼働させる||
-|基礎編|20_kubernetes_3|自作API PodをCICDパイプラインに乗せて運用する|5/23 準備中|
-|実践編|21_kubernetes|Linux Foundationの実技資格CKADの教材を紹介、操作訓練として使えます||
-
-
+|基礎編|20_kubernetes_3|自作API PodをCICDパイプラインに乗せて運用する||
+|基礎編|21_kubernetes|Linux Foundationの実技資格CKADの教材を紹介、操作訓練として使えます||
+|基礎編|22_function|Cloud Functionで任意のアプリを稼働させる|5/24準備中|
+|基礎編|23_cloudrun|Cloud Runで任意のアプリを稼働させる|5/24準備中|
+|基礎編|24_bigquery|snowflakeのライバル、BigQueryを使ってみる回|5/24準備中|
+|基礎編|25_bigtable|各種試験でお馴染みBigTableを使ってみる回|5/24準備中|
+|基礎編|26_datastore|GCPのDynamo DBか？Datastoreを使ってみる回|5/24準備中|
+|基礎編|27_cloudsql|Cloud SQLでPostgresqlを使ってみる回|5/24準備中|
+|基礎編|28_cloudsql_2|AlloyDB for PostgreSQLを使ってみる回（課金注意かも）|5/24準備中|
+|基礎編|29_cloudspanner|分散RDBの衝撃、CloudSpannerを使ってみる回|5/24準備中|
 |実践編|（以下、検討中）|||
-|実践編|候補：インフラ拡充|GKE/CICDのプライベート化、セキュリティ対応（20話ぐらい）|案検討中|
-|実践編|候補：アプリ拡充|snowflakeとの接続、接続先のsnowflakeもterraform化（20話ぐらい）|案検討中|
