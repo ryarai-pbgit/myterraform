@@ -4,182 +4,194 @@
 17_docker_2が完了していること。
 
 ### 2. 今回の構成図
-前回から変更なし。
+今回はkubernetesの基本要素と定義方法の紹介になります。<br>
+![k8s-exposed-pod.png](asset/k8s-exposed-pod.png "k8s-exposed-pod.png")
 
 ### 3. kubernetesの基本要素
-下記を参考にして、Next.jsをインストールします。<br>
-https://nextjs.org/docs/getting-started/installation<br>
-Node.jsのインストールと、npx create-next-app@latestを実行します。<br>
-create-next-appの選択肢は全てデフォルトで良いです。
+アプリケーションを稼働させるために必要な基本要素は下記になりますので、押さえておきましょう。<br>
+一言説明wと公式リンクを貼っておきます。
+|No|名称|説明|公式リンク|
+|--|--|--|--|
+|1|Namespace|論理的にリソースを分離します。pureなkubernetesではあくまでも論理的な分割で、タグが付いているような感じです。NWその他の制御機能は有しません。（Openshiftだと制御が付いてきます）|https://kubernetes.io/ja/docs/concepts/overview/working-with-objects/namespaces/|
+|2|Ingress|L7のロードバランサで、クラウドの各種L7LBサービスと統合されています。ドメイン設定、通信暗号化、パスルーティングなどが可能です。バックエンドには後続で紹介するServiceが必要です。|https://kubernetes.io/ja/docs/concepts/services-networking/ingress/|
+|3|Service|L4のロードバランサで、クラスタ外にPodを公開するときは必ず定義する必要あります。loadbalancerタイプはクラウドの各種L4LBサービスと統合されており、呼び出すとクラウドのLBが召喚されます。NodePortタイプは、k8s独自リソースでL7LBなどの背後で単に公開すれば良い時などに使われます。|https://kubernetes.io/ja/docs/concepts/services-networking/service/|
+|4|Pod|アプリケーションの本体であり、NICを共有するコンテナの集合体です。1つのPodに複数のコンテナを構成することができ、アプリのメインコンテナとenvoyなどの特定機能に特化したサイドカーコンテナを組み合わせることが一般的です。|https://kubernetes.io/ja/docs/concepts/workloads/pods/|
+|5|ReplicaSet|Podの集合体で指定されたreplica数を守るようにPodを管理してくれます。上位となる後続のDeploymentの形で指定するが通例であるため、あまり意識することは少ないかもしれません。|https://kubernetes.io/ja/docs/concepts/workloads/controllers/replicaset/|
+|6|Deployment|ReplicaSetの集合体で、通常はこのDeploymentを使ってアプリケーションをデプロイします。|https://kubernetes.io/ja/docs/concepts/workloads/controllers/deployment/|
+|7|HorizontalPodAutoscaler|指定されたCPU使用率などの基準を元にPodのオートスケールをしてくれる要素です。|https://kubernetes.io/ja/docs/tasks/run-application/horizontal-pod-autoscale/|
+|8|NetworkPolicy|Namespace間のファイアウォールで、許可拒否する通信を指定できます。|https://kubernetes.io/ja/docs/concepts/services-networking/network-policies/|
+|9|ServiceAccount|図にはありませんでしたが、kubernetes上で稼働するアプリケーションのユーザアカウントになります。クラウドのIAMと統合されていることが通例で、IAMロールを割り当てて利用できるサービスを限定したりします。|https://kubernetes.io/docs/concepts/security/service-accounts/|
+
+この先では、これらの設定例を一通り見ていきます。演習的に実装していくのは、7, 8以外、となるかと思います。
+
+### 4. 各リソースの設定方法
+ここからは各リソースの設定方法を見ていきます。基本的にはどれも定義文をapplyするだけなので、定義をつらつら書いていきます。<br>
+今回は必要最低限の項目しか指定しませんが、今後演習を重ねる中で少しずつアップグレードさせていきます。<br>
+もし余裕があれば以前作成したネットワーク、インスタンス、GKEモジュールを実行して、VMからkubectlを実行して確認してみてください。<br>
 ```
-% npx create-next-app@latest
-Need to install the following packages:
-create-next-app@14.2.3
-Ok to proceed? (y) y
-✔ What is your project named? … my-app
-✔ Would you like to use TypeScript? … No / Yes
-✔ Would you like to use ESLint? … No / Yes
-✔ Would you like to use Tailwind CSS? … No / Yes
-✔ Would you like to use `src/` directory? … No / Yes
-✔ Would you like to use App Router? (recommended) … No / Yes
-✔ Would you like to customize the default import alias (@/*)? … No / Yes
+# まずはkubectlの基本操作方法
+# 適用
+kubectl apply -f [ファイル名]
 
-・・・
+# 取り下げ
+kubectl delete -f [ファイル名]
 
-npm notice 
-npm notice New minor version of npm available! 10.2.3 -> 10.8.0
-npm notice Changelog: https://github.com/npm/cli/releases/tag/v10.8.0
-npm notice Run npm install -g npm@10.8.0 to update!
-npm notice 
+# リスト参照
+kubectl get [リソース種類] -n [名前空間]
+
+# 個別詳細を参照
+kubectl describe [リソース種類] [リソース名] -n [名前空間]
+
+# 個別詳細をyaml/json形式で参照
+kubectl get [リソース種類] [リソース名] -n [名前空間] -o yaml/json
 ```
-この手順で、my-appというフォルダができていることを確認します。
-
-### 4. マルチステージビルド
-my-appフォルダの直下に下記のDockerfileを配置します。<br>
-参考）https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile<br>
-このファイルでは、いくつものステージ（FROM句が複数行ある）でビルドが行われています。<br>
-画面系のフレームワークでは、構成要素や依存するモジュールが単純なAPIなどと比較すると多くなるため、コンテナサイズを最小限にするために、このようなビルドをします。<br>
-実施しないと動かないわけではないので、PoCなどでは後回しになるかもしれませんが、本番系になるとモジュールの容量や脆弱性対応などで不必要なものは入れないように制御する必要が出てくるので、このような対応をすることになります。<br>
-他の方法としては、別のビルド端末でビルドして、コンテナはビルドされたモジュールをコピーして、実行コマンド打つだけ、みたいな形のプロジェクトもあります。
+リソース毎の定義の書き方例です。-（ハイフン）を3つ繋げると、1つのファイルに複数リソース繋げて書けます。<br>
+オペレーションの単位でまとめると操作が簡単になってスムーズです。<br>
+また、実際のクラウド上で利用するときは、そのクラウド毎に決められたmetadata.annotationsを指定する形になります。<br>
+今回は簡単のため外していますが、例えば、IngressにプライベートLBを設定しますというアノテーションをつけたり、Service AccountにこのIAMロールを紐づけます、という指定をしたりします。
 ```
-FROM node:18-alpine AS base
-
-# Install dependencies only when needed
-FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
-WORKDIR /app
-
-# Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
-
-
-# Rebuild the source code only when needed
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN \
-  if [ -f yarn.lock ]; then yarn run build; \
-  elif [ -f package-lock.json ]; then npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
-
-# Production image, copy all the files and run next
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder /app/public ./public
-
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
-
-EXPOSE 3000
-
-ENV PORT 3000
-
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD HOSTNAME="0.0.0.0" node server.js
+# 1. Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app
+---
+# 2. Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minimal-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx-example
+  rules:
+  - http:
+      paths:
+      - path: /testpath
+        pathType: Prefix
+        backend:
+          service:
+            name: test
+            port:
+              number: 80
+---
+# 3. Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: myservice
+  namespace: app
+spec:
+  type: NodePort
+  selector:
+    app: demoapp
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+# 6. Deployment
+# (5. ReplicaSet)
+# (4. Pod)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demoapp
+  namespace: app
+  labels:
+    app: demoapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demoapp
+  template:
+    metadata:
+      labels:
+        app: demoapp
+    spec:
+      serviceAccountName: mypodsa
+      containers:
+      - name: demoapp
+        image: asia-northeast1-docker.pkg.dev/YOUR_PROJECT_ID/myreg/demoapp:version
+        ports:
+        - containerPort: 80
+---
+# 7. HorizontalPodAutoscaler
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: php-apache
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: php-apache
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+status:
+  observedGeneration: 1
+  lastScaleTime: <some-time>
+  currentReplicas: 1
+  desiredReplicas: 1
+  currentMetrics:
+  - type: Resource
+    resource:
+      name: cpu
+      current:
+        averageUtilization: 0
+        averageValue: 0
+---
+# 8. NetworkPolicy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: test-network-policy
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      role: db
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - ipBlock:
+        cidr: 172.17.0.0/16
+        except:
+        - 172.17.1.0/24
+    - namespaceSelector:
+        matchLabels:
+          project: myproject
+    - podSelector:
+        matchLabels:
+          role: frontend
+    ports:
+    - protocol: TCP
+      port: 6379
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 10.0.0.0/24
+    ports:
+    - protocol: TCP
+      port: 5978
+---
+# 9. Service Account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mypodsa
+  namespace: app
 ```
-いくつものFROM句があることを確認できると思います。<br>
-最初のFROM句はベースイメージを作成しています。見ての通り、nodejsがインストールされているalpineのイメージです。<br>
-これがビルドをしていく上でのベースになるイメージになります。
-```
-FROM node:18-alpine AS base
-```
-次に、depsイメージを作成しています。その後、このdepsにpackage.json（Pythonのrequirement.txt）に記載のパッケージをインストールしています。
-```
-# Install dependencies only when needed
-FROM base AS deps
-```
-次に、builderイメージを作成しています。このイメージでは、depsイメージからパッケージを、ローカルからソースコードを仕入れてNext.jsアプリケーションのビルドを行っています。
-```
-# Rebuild the source code only when needed
-FROM base AS builder
-・・・
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-```
-最後に、runnerイメージを作成していますが、このイメージが最終的に実行されるイメージになります。<br>
-これまでのイメージは捨てるのでどうでも良かったりしますがw、このイメージはこだわらないといけません。<br>
-baseイメージをベースとして、builderイメージで生成されたビルドされたアプリケーションのうち、稼働に必要なもののみを収集して作られています。<br>
-また、実行ユーザやグループの設定、ポートの公開などが行われており、最後にCMD命令でアプリケーションが稼働しています。
-```
-FROM base AS runner
-
-（略）
-
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
-
-EXPOSE 3000
-
-ENV PORT 3000
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD HOSTNAME="0.0.0.0" node server.js
-```
-### 5. 実行してみる
-一通りマルチステージビルドを見てきたところで、実際にビルドして動作確認を行います。<br>
-Next.jsは初期状態では、ローカル開発者向けにビルドされてしまうため、サーバサイドで動作するように設定ファイルを修正する必要があります。<br>
-next.config.mjsというファイルを下記のように修正します。
-```
-[next.config.mjs]
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-    output: "standalone",
-};
-
-export default nextConfig;
-```
-修正後、my-appフォルダ内にDockerfileがあることを確認して、my-appフォルダの直下でビルドコマンドを実行します。
-```
-$ docker build -t nextjs-docker:v001 .
-```
-エラーなく完了することを確認します。自身の環境では下記のようになりました。
-```
-[+] Building 37.9s (21/21) FINISHED 
-```
-コンテナを実行します。
-```
-docker run -p 3000:3000 nextjs-docker:v001
-```
-ブラウザで、http://localhost:3000 にアクセスして下記ようなNext.jsのデモ画面が確認できればOKです。
-
-![next.js](asset/17.png "next.js")
-
-今回は、create-next-appしたままになっていますが、コードを拡充していけば任意のNext.jsサイトをコンテナで稼働させることができます。
-
-### 6. 次回予告
-次回から、dockerからkubernetesに進みます。次回はkubernetesの基本リソース、基本操作を学びます。
+### 5. 次回予告
+次回は、これまでに作ってきたGKEモジュールやCICDモジュールとFastAPIを組み合わせて動作を確認します。
