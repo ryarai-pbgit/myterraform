@@ -37,7 +37,7 @@
 |基礎編|21_kubernetes|Linux Foundationの実技資格CKADの教材を紹介、操作訓練として使えます||
 |基礎編|22_network_basis1|推移的ピアリングでルートが伝播されない話の簡単な例、問題把握編||
 |基礎編|23_network_basis2|推移的ピアリングでルートが伝播されない話の簡単な例、問題解決編||
-|基礎編|24_network_basis3|宝暦より続く東海道53msの他、リージョン間のレイテンシも計測する（ネタ回）|5/26準備中|
+|基礎編|24_network_basis3|宝暦より続く東海道53msの他、リージョン間のレイテンシも計測する（ややネタ回）|5/26準備中|
 |基礎編|25_serverless|cloudfunctionを利用する|5/26準備中|
 |基礎編|26_serverless_2|cloudrunを利用する|5/26準備中|
 |基礎編|27_serverless_3|serverlessで受けてVPCに流してみる|5/26準備中|
