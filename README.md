@@ -35,12 +35,8 @@
 |基礎編|19_kubernetes_2|自作API PodをGKE上で稼働させる||
 |基礎編|20_kubernetes_3|自作API PodをCICDパイプラインに乗せて運用する||
 |基礎編|21_kubernetes|Linux Foundationの実技資格CKADの教材を紹介、操作訓練として使えます||
-|基礎編|22_function|Cloud Functionで任意のアプリを稼働させる|5/24準備中|
-|基礎編|23_cloudrun|Cloud Runで任意のアプリを稼働させる|5/24準備中|
-|基礎編|24_bigquery|snowflakeのライバル、BigQueryを使ってみる回|5/24準備中|
-|基礎編|25_bigtable|各種試験でお馴染みBigTableを使ってみる回|5/24準備中|
-|基礎編|26_datastore|GCPのDynamo DBか？Datastoreを使ってみる回|5/24準備中|
-|基礎編|27_cloudsql|Cloud SQLでPostgresqlを使ってみる回|5/24準備中|
-|基礎編|28_cloudsql_2|AlloyDB for PostgreSQLを使ってみる回（課金注意かも）|5/24準備中|
-|基礎編|29_cloudspanner|分散RDBの衝撃、CloudSpannerを使ってみる回|5/24準備中|
+|基礎編|22_network_basis1|推移的ピアリングでルートが伝播されない話の簡単な例、問題把握編||
+|基礎編|23_network_basis2|推移的ピアリングでルートが伝播されない話の簡単な例、問題解決編||
+|基礎編|24_network_basis3|宝暦より続く東海道53msの他、リージョン間のレイテンシも計測する|5/26準備中|
+|基礎編|25_network_basis4|ロードバランサとVMを組み合わせて、ゾーン、リージョン間で負荷分散|5/26準備中|
 |実践編|（以下、検討中）|||
