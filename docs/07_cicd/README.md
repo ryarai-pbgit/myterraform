@@ -204,6 +204,30 @@ module "cicd" {
 ### 4. 動作確認
 エラーなく実行できればOK。
 
+#### 無料枠を利用している場合
+もしかすると、CICDのワーカプールを作ったタイミングでクォータ上限エラーが出るかもしれません。<br>
+その場合は、下記のようにワーカプールを作らず、クラウドで自動調達されているものを利用する形で、今回と同じことができます。<br>
+ただし、機能制限やセキュリティの問題があるので、実務上は利用が難しいかもしれませんが、ひとまず練習のためこの内容で進めてもらえればと思います。<br>
+以後は、２パターン作っていくのは難しいので、CICDに関するところは、できそうならやる、無料枠で怒られたらスキップする形で進めてください。<br>
+基礎編のうちは、小さなテーマが小出しになっているので、1つ2つ飛ばしても影響ないかと思います。<br>
+```
+[変更点]
+[modules/cicd/main.tf]
+# 無料枠だと東京リージョンだとマルチテナントビルドプールが利用できないことが多々ある。
+resource "google_cloudbuild_trigger" "filename-trigger"のlocationを"asia-east1"に変更
+
+# 無料枠だとクォータ上限にかかる可能性があるので、プールを作らないようにする。
+resource "google_cloudbuild_worker_pool" "mybuildpool"をコメントアウト
+
+[myrepo/cloudbuild.yaml]
+# ファイル末尾のoptionsからpoolを削除する（poolとname）
+options:
+  logging: GCS_ONLY
+  automapSubstitutions: true
+#  pool:
+#    name: 'projects/YOUR_PROJECT_ID/locations/asia-northeast1/workerPools/mybuildpool'
+```
+
 ### 5. 次回予告
 今回作ったパイプラインを利用してアプリケーションのデプロイを試行します。
 
