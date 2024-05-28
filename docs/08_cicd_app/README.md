@@ -126,13 +126,69 @@ CloudBuild > 履歴から辿ることができます。<br>
 ![cloudbuildlog](asset/cloudbuildlog.png "cloudbuildlog")
 
 GKEにアプリケーションがデプロイされていることを確認します。<br>
-まずは、GCPの画面から確認します。
+まずは、GKEの画面から確認します。<br>
 ![gkekakunin](asset/gkekakunin.png "gkekakunin")
 
-
 次に、踏み台VM内からサービス経由でnginxアプリケーションへの疎通を確認します。<br>
+手順は06_gkeで実施した内容と同じですが、１通りもう一度書いておきます。<br>
+まず、クラスタとの認証を行います。。ここではコマンドだけ書いておきます。<br>
 ```
+$ grep -rhE ^deb /etc/apt/sources.list* | grep "cloud-sdk"
+$ sudo apt-get update
+$ sudo apt-get install -y kubectl
+$ sudo apt-get install google-cloud-sdk-gke-gcloud-auth-plugin
+$ gke-gcloud-auth-plugin --version
+$ gcloud container clusters get-credentials mygkecluster --region=asia-northeast1
 ```
+次にエンドポイントを探ります。Ingressなどを立ち上げていれば一目瞭然ですが、今回は簡易版でNodePortで立ち上げているので、探す必要があります。<br>
+endpointはIPアドレスとポート番号で構成されますが、IPアドレスはNodePortの仕様により、ワーカNodeのIPアドレスのいずれか、になります。<br>
+kubectl get nodesコマンドのwideオプションで参照することができます。VMの画面から拾ってもらっても良いです。<br>
+```
+$ kubectl get nodes -o wide
+NAME                                           STATUS   ROLES    AGE   VERSION                INTERNAL-IP   EXTERNAL-IP      OS-IMAGE                             KERNEL-VERSION   CONTAINER-RUNTIME
+gke-mygkecluster-mygkenodepool-54205a1e-prd7   Ready    <none>   45m   v1.27.11-gke.1062003   10.1.0.9      35.243.72.108    Container-Optimized OS from Google   5.15.146+        containerd://1.7.10
+gke-mygkecluster-mygkenodepool-57e7421e-0nh9   Ready    <none>   45m   v1.27.11-gke.1062003   10.1.0.7      104.198.122.97   Container-Optimized OS from Google   5.15.146+        containerd://1.7.10
+gke-mygkecluster-mygkenodepool-5d0ac5be-dd2x   Ready    <none>   45m   v1.27.11-gke.1062003   10.1.0.8      34.84.205.130    Container-Optimized OS from Google   5.15.146+        containerd://1.7.10
+```
+今回は、NATGW経由でインターネット経由するようなことはせずに、プライベート接続しますので、INTERNAL-IPの列を参照します。<br>
+3つのうちいずれか、なので、10.1.0.9 としておきます。<br>
+次にポート番号を探ります。これは、NodePort作成時に自動的に割り振られます。（Serviceを定義しているYAML内で値を指定することも可能です。）<br>
+GKEの画面か下記のコマンドで値を確認することができます。<br>
+```
+$ kubectl get svc -n app
+NAME        TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+myservice   NodePort   10.80.127.57   <none>        80:31643/TCP   34m
+```
+ポート番号は、31643のようです。<br>
+curl文で疎通を確認します。nginxのトップ画面のHTMLが応答されればOKです。<br>
+```
+$ curl http://10.1.0.9:31643/
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+```
+
+お疲れ様でした。
 
 ### 5. 次回予告
 ここまでで超基本的なコンテナ基盤とCICDパイプラインが完成しましたが、立ち上げることに注力しておりテストが行われていません。<br>
