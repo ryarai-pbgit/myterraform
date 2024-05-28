@@ -37,8 +37,10 @@
 |基礎編|21_kubernetes|Linux Foundationの実技資格CKADの教材を紹介、操作訓練として使えます||
 |基礎編|22_network_basis1|推移的ピアリングでルートが伝播されない話の簡単な例、問題把握編||
 |基礎編|23_network_basis2|推移的ピアリングでルートが伝播されない話の簡単な例、問題解決編||
-|基礎編|24_network_basis3|宝暦より続く東海道53msの他、リージョン間のレイテンシも計測する（ややネタ回）||
-|基礎編|25_network_basis4|private service connect|準備中|
+|基礎編|24_network_basis3|宝暦より続く東海道53msの他、リージョン間のレイテンシも計測する||
+|基礎編|25_network_basis4|private service connect 1（アドレスとフォワードルールの作成）||
+|基礎編|26_network_basis5|private service connect 2（Cloud DNSの設定）|準備中|
+|基礎編|27_network_basis6|private service connect 3（CloudSQLへの接続）|準備中|
 |ネタ帳|||準備中|
 |ネタ帳|25_database_1|VPC内のVMからCloudSQLを利用する（インフラ編）|準備中|
 |ネタ帳|26_database_2|VPC内のVMからCloudSQLを利用する（アプリ編）|準備中|
