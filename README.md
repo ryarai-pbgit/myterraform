@@ -42,17 +42,11 @@
 |基礎編|26_network_basis5|private service connect 2（Cloud DNSの設定）||
 |基礎編|27_network_basis6|private service access 1（CloudSQLへの接続）|準備中|
 |ネタ帳|||準備中|
-|ネタ帳|25_database_1|VPC内のVMからCloudSQLを利用する（インフラ編）|準備中|
-|ネタ帳|26_database_2|VPC内のVMからCloudSQLを利用する（アプリ編）|準備中|
-|ネタ帳|27_serverless_2|cloudrunを利用する|準備中|
-|ネタ帳|28_serverless_3|serverlessで受けてVPCに流してみる（サーバレスVPCアクセス）|準備中|
-|ネタ帳|29_serverless_4|cloudrunの前段にcloudloadbalancerを設定する|準備中|
-|ネタ帳|30_serverless_5|CloudArmorでWAFやDDos保護を行う|準備中|
-|ネタ帳|31_serverless_6|CloudIAPによる認証認可を行うみる|準備中|
-|ネタ帳|32_private_backend_1|GKEクラスタをプライベートクラスタにする|準備中|
-|ネタ帳|33_private_backend_2|CICDパイプラインをプライベート化する|準備中|
-|ネタ帳|34_private_backend_3|機密情報はSecretsManagerを利用する|準備中|
-|ネタ帳|基礎編は50ぐらいの予定|増えてきたらフォルダを分けますw|準備中|
-|実践編１|**_overall_architecture|基礎編の内容をもとにはじめての全体アーキテクチャを検討する|準備中|
-|実践編１|**_nextjs_frontend|これからしばらく利用するアプリケーションを開発する(frontend)|準備中|
-|実践編１|**_python_backend|これからしばらく利用するアプリケーションを開発する(backend)|準備中|
+|ネタ帳|cloud loadbalancer|バックエンドにVMを配置するところから基本事項を取り上げる|準備中|
+|ネタ帳|cloud armor|loadbalancerの延長で取り上げる|準備中|
+|ネタ帳|cloud run|前段にLBの設置、後続でVPCに接続するケースを取り上げる|準備中|
+|ネタ帳|gke cluster private|ここまでで一巡するはずなのでGKEのプライベート化を行う|準備中|
+|ネタ帳|cicd private|GKEのプライベート版にCICDを合わせる、既出のcloud router/vpnでBGPが出てくる|準備中|
+|ネタ帳|kubernetes|secrets, persistent volumeなど、まだ出てきていない基本リソースを取り上げる|準備中|
+|ネタ帳|application|実践編用のアプリケーションの開発|準備中|
+|ネタ帳|基礎編は50ぐらいの予定、以下実践編へ|増えてきたらフォルダを分けますw|準備中|
