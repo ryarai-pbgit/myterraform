@@ -40,7 +40,8 @@
 |基礎編|24_network_basis3|宝暦より続く東海道53msの他、リージョン間のレイテンシも計測する||
 |基礎編|25_network_basis4|private service connect 1（アドレスとフォワードルールの作成）||
 |基礎編|26_network_basis5|private service connect 2（Cloud DNSの設定）||
-|基礎編|27_network_basis6|private service access 1（CloudSQLへの接続）|準備中|
+|基礎編|27_network_basis6|private service access 1（CloudSQLへの接続）||
+|基礎編|28_network_basis7|private service connect 3（CloudSQLへの接続）|準備中|
 |ネタ帳|||準備中|
 |ネタ帳|cloud loadbalancer|バックエンドにVMを配置するところから基本事項を取り上げる|準備中|
 |ネタ帳|cloud armor|loadbalancerの延長で取り上げる|準備中|
