@@ -92,5 +92,13 @@ VMにログインして、psqlを利用して接続確認を行います。<br>
 Redis（Memorystore）でもインスタンスが入れ替わるだけで同じ原理でプライベートアクセスが可能です。<br>
 GKEのプライベートクラスタでは、コントロールプレーンがこの形で提供されます。推移的ルートが禁止されてセキュア（なので、CloudBuildから指示出そうとするとプロキシ配置するか、CloudVPNでBGP交換を、という流れです。CloudBuildからCloudSQL見ようとしても同じことがおきます。）
 
+### destroy時にエラーが発生したら
+Destroy時に下記のようなエラーが出るかもしれません。
+```
+Error: Unable to remove Service Networking Connection, err: Error waiting for Delete Service Networking Connection: Error code 9, message: Failed to delete connection; Producer services (e.g. CloudSQL, Cloud Memstore, etc.) are still using this connection.
+```
+その場合は、VPC ネットワーク > VPC ネットワーク ピアリングから前述のservicenetworkking-googleapis-comのピアリングを手動で削除してください。<br>
+その後、もう一度Destroyを流せば（その時点でプライベートIPとVPCの２リソースだけ残っている状態になっていると思います。）削除できます。
+
 ### 6. 次回予告
 プライベートサービスアクセスではなく、前回取り上げたプライベートサービスコネクトでも接続ができるようですので試していきます。
