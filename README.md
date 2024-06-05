@@ -42,8 +42,9 @@
 |基礎編|26_network_basis5|private service connect 2（Cloud DNSの設定）||
 |基礎編|27_network_basis6|private service access 1（CloudSQLへの接続）||
 |基礎編|28_network_basis7|private service connect 3（CloudSQLへの接続）||
-|基礎編|29_lb_basis1|Load Balancerの基本 1（VM2台の負荷分散）|準備中|
+|基礎編|29_lb_basis1|Load Balancerの基本 1（初めてのMIG）||
 |ネタ帳|||準備中|
+|基礎編|30_lb_basis1|Load Balancerの基本 2（VM2台の負荷分散）|準備中|
 |ネタ帳|cloud loadbalancer|バックエンドにVMを配置するところから基本事項を取り上げる|準備中|
 |ネタ帳|cloud armor|loadbalancerの延長で取り上げる|準備中|
 |ネタ帳|cloud run|前段にLBの設置、後続でVPCに接続するケースを取り上げる|準備中|
