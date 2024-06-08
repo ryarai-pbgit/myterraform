@@ -43,10 +43,9 @@
 |基礎編|27_network_basis6|private service access 1（CloudSQLへの接続）||
 |基礎編|28_network_basis7|private service connect 3（CloudSQLへの接続）||
 |基礎編|29_lb_basis1|Load Balancerの基本 1（初めてのMIG）||
+|基礎編|30_lb_basis2|Load Balancerの基本 2（VM2台の負荷分散）||
 |ネタ帳|||準備中|
-|基礎編|30_lb_basis1|Load Balancerの基本 2（VM2台の負荷分散）|準備中|
-|ネタ帳|cloud loadbalancer|バックエンドにVMを配置するところから基本事項を取り上げる|準備中|
-|ネタ帳|cloud armor|loadbalancerの延長で取り上げる|準備中|
+|基礎編|31_lb_basis3|Load Balancerの基本 2（エンドポイントの保護）|準備中|
 |ネタ帳|cloud run|前段にLBの設置、後続でVPCに接続するケースを取り上げる|準備中|
 |ネタ帳|gke cluster private|ここまでで一巡するはずなのでGKEのプライベート化を行う|準備中|
 |ネタ帳|cicd private|GKEのプライベート版にCICDを合わせる、既出のcloud router/vpnでBGPが出てくる|準備中|
