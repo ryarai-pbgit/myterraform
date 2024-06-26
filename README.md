@@ -45,4 +45,6 @@
 |基礎編|29_lb_basis1|Load Balancerの基本 1（初めてのMIG）||
 |基礎編|30_lb_basis2|Load Balancerの基本 2（VM2台の負荷分散）||
 |基礎編|31_lb_basis3|Load Balancerの基本 3（Cloud Armorによるエンドポイントの保護）||
+|基礎編|32_serverless_basis1|Serverlessの基本 1（Cloud Runを起動する）||
+|基礎編|33_serverless_basis2|Serverlessの基本 2（Cloud Functionsを起動する）||
 |以降、準備中||||
