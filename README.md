@@ -47,4 +47,6 @@
 |基礎編|31_lb_basis3|Load Balancerの基本 3（Cloud Armorによるエンドポイントの保護）||
 |基礎編|32_serverless_basis1|Serverlessの基本 1（Cloud Runを起動する）||
 |基礎編|33_serverless_basis2|Serverlessの基本 2（Cloud Functionsを起動する）||
+|基礎編|34_gke_private|private gke clusterを作成する||
+|基礎編|35_workload_identity|private gke clusterにworkload identityを設定する||
 |以降、準備中||||
