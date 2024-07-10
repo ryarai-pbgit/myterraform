@@ -49,4 +49,5 @@
 |基礎編|33_serverless_basis2|Serverlessの基本 2（Cloud Functionsを起動する）||
 |基礎編|34_gke_private|private gke clusterを作成する||
 |基礎編|35_workload_identity|private gke clusterにworkload identityを設定する||
+|基礎編|36_myapp|実践編用のアプリケーションを試作する（Streamlit, Gemini）||
 |以降、準備中||||
