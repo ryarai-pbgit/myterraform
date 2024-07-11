@@ -52,6 +52,6 @@
 |基礎編|36_myapp|実践編用のアプリケーションを試作する（Streamlit, Gemini）||
 |基礎編|37_gke_private_myapp|実践編用のアプリケーションをGKEで稼働させる||
 |基礎編|38_gke_private_ingress|実践編用のアプリケーション向けにIngressを整備する||
-|基礎編|39_gke_private_cicd|実践編用のアプリケーション向けのCICDに乗せる||
+|基礎編|39_gke_private_cicd|実践編用のアプリケーション向けをCICDに乗せる|準備中|
 |以降、実践編準備中||||
 |実践編|40_overall_architecture|実践編用の全体アーキテクチャ|準備中|
