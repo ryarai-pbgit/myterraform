@@ -50,4 +50,8 @@
 |基礎編|34_gke_private|private gke clusterを作成する||
 |基礎編|35_workload_identity|private gke clusterにworkload identityを設定する||
 |基礎編|36_myapp|実践編用のアプリケーションを試作する（Streamlit, Gemini）||
-|以降、準備中||||
+|基礎編|37_gke_private_myapp|実践編用のアプリケーションをGKEで稼働させる||
+|基礎編|38_gke_private_ingress|実践編用のアプリケーション向けにIngressを整備する||
+|基礎編|39_gke_private_cicd|実践編用のアプリケーション向けのCICDに乗せる||
+|以降、実践編準備中||||
+|実践編|40_overall_architecture|実践編用の全体アーキテクチャ|準備中|
