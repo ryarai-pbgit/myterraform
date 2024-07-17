@@ -52,6 +52,7 @@
 |基礎編|36_myapp|実践編用のアプリケーションを試作する（Streamlit, Gemini）||
 |基礎編|37_gke_private_myapp|実践編用のアプリケーションをGKEで稼働させる||
 |基礎編|38_gke_private_ingress|実践編用のアプリケーション向けにIngressを整備する||
-|基礎編|39_gke_private_cicd|実践編用のアプリケーション向けをCICDに乗せる|準備中|
+|基礎編|39_gke_private_cicd_1|実践編用のアプリケーションをCICDに乗せる、Githubとの連結/プライベートプール作成まで||
+|基礎編|40_gke_private_cicd_2|実践編用のアプリケーションをCICDに乗せる、HAVPN作成/GKEにデプロイするまで||
 |以降、実践編準備中||||
-|実践編|40_overall_architecture|実践編用の全体アーキテクチャ|準備中|
+|実践編|41_overall_architecture|実践編用の全体アーキテクチャ|準備中|
